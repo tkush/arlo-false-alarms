@@ -14,3 +14,12 @@ The basic idea behind this code is to process the video captured by the camera a
 6. The de-noising is the bottleneck in the above code. Therefore, ony the first few seconds of the video are considered. The assumption behind this is the following: whatever triggered the motion sensor has to be present in the first few seconds of the video. Therefore there is no need to parse the entire video which can get very time consuming
 7. The other idea is to consider a chunk of the video (in 1s intervals) and compute the average SSI across 1s chunks rather than across each frame in the video
 8. Finally, only a few seconds (initial) of the video clip are considered to speed-up the computation without a reduction in accuracy
+
+### TO-DO
+- [ ] Upload the final code to repo
+- [ ] Convert code to accept command line arguments
+- [ ] Insert more information in README (pictures, explanation of denoising, timing)
+- [ ] Add code for getting video from the Arlo website
+- [ ] Host code on a simple server and make the workflow automatic
+- [ ] OR plug this into IFTTT
+- [ ] Add code to detect objects in the TRUE detections (object recognition using RCNN?)
