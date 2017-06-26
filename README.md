@@ -1,8 +1,11 @@
 # arlo-false-alarms
 Code to detect false alarms in Arlo home camera videos
 
-### Motivation
+### Motivation/Use case
 This code is aimed to detect false alarms when using the Netgear Arlo cameras for personal/home use. I have three of these cameras installed in my home and I've been plagued with false alarms where the camera records video when it thinks it's detected motion but there is actually nothing/no-one moving in the video that is captured. The motion detection on the camera is not done through the camera but through a motion detector - this leaves some scope to process the video and determine if the clip captured was a true/false detection. 
+Broadly, there are two use cases that such a processing of the video can be applied to:
+1. The first is to do an **online** processing. This means that as soon as the camera detects motion and records the video, this program should process that video and determine whether it was a false alarm or not. Automation such as an email message/app notification would suit this use case very well. This is how Arlo currently functions - there is a notification on my phone almost as soon as "motion" is detected. 
+2. The second is to do a **batch-processing** of all the videos recorded through the day/week/etc. This is done by manually downloading all the recorded videos from the Arlo website and then running them through the code presented here - with an output of "True" or "False" for the motion detection. **The code presented here is catered to this use case**.
 
 ### Basic idea
 The basic idea behind this code is to process the video captured by the camera and determine if there is motion within the clip or not. To do this, I wrote some simple code in Python that uses methods implemented in the module OpenCV. The workflow is the following: 
@@ -48,10 +51,12 @@ A 4-tuple is written to the JSON output file which is `(name_of_video, motion_de
 This code was tested on video captured from my home's Arlo camera on 152 videos of length varying from 3s to 10s (the standard length of video captured on my cameras). These videos were pre-labelled as True (126) or False (26) videos. This code achieves an accuracy of **TO-DO**
 Here are some examples of True/False detections:
 
-![Video classified as True detection](/images/TRUE.gif)
+<img src="/images/TRUE.gif" alt="Video correctly classified as True detection" width="320" height="176" />
+
 Correct classification (motion detected)
 
-![Video classified as False detection](/images/FALSE.gif)
+<img src="/images/FALSE.gif" alt="Video correctly classified as False detection" width="320" height="176" />
+
 Correct classification (no motion detected)
 
 ### TO-DO
