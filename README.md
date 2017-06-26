@@ -48,7 +48,7 @@ For testing the code on known videos (videos known to be TRUE or FALSE detection
 A 4-tuple is written to the JSON output file which is `(name_of_video, motion_detected_true_or_false, average_SSI_score, time_elapsed_in_analysis)`.
 
 ### Results
-This code was tested on video captured from my home's Arlo camera on 152 videos of length varying from 3s to 10s (the standard length of video captured on my cameras). These videos were pre-labelled as True (138) or False (26) videos. This code achieves an accuracy of **TO-DO** (138/151 correct true detections and /27 correct false detections) with the following parameters: 
+This code was tested on video captured from my home's Arlo camera on 178 videos of length varying from 3s to 10s (the standard length of video captured on my cameras). These videos were pre-labelled as True (152) or False (26) videos. This code achieves an accuracy of **92.69%** (139/152 correct true detections and 26/26 correct false detections) with the following parameters: 
 * FPS set to 24
 * First 12 frames skipped
 * 3 seconds of video considered (1s at the start, 1s in the middle and 1s from the end)
@@ -66,6 +66,13 @@ Correct classification (no motion detected)
 The approach presented here is advantageous in that it can be applied to a different camera feed without any modifications to the code since the basic idea remains the same irrespective of where the camera is pointed or what the lighting conditions are. 
 
 Feel free to post comments/fork this repo or just drop me a line! 
+
+### Pre-requisites to run
+This code was developed and tested using the following: 
+* Python 3.5.2
+* OpenCV 3.1.0
+* SciKit Image 0.12.3
+You're probably best using the same or higher versions :)
 
 ### TO-DO
 - [x] Upload the final code to repo
