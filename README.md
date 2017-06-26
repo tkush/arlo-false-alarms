@@ -9,16 +9,55 @@ The basic idea behind this code is to process the video captured by the camera a
 1. Load the video frame by frame
 2. Change the frame from RGB to Grayscale 
 3. De-noise the gray frame using `cv2.fastNlMeansDenoising`. Details on the parameters are discussed later.
-4. Skip the first n frames to avoid sudden changes in contrast when the camera is triggered. This contrast changing effect is most noticeable in bright light, for example when the camera is pointed outdoors
+4. Skip the first n frames to avoid sudden changes in contrast when the camera is triggered. This contrast changing effect is most noticeable in bright light, for example when the camera is pointed outdoors. Sometimes the contrast variation changes pixed values greatly and that will lead to incorrect results
 5. Keep the last frame in memory and compute a difference score between the last and current frame using `compare_ssim` from `skimage.measure`. This is a great method that computes the "Structural Similarity Index (SSI)". A higher value indicates more similarity and a lower score indicates more difference. A threshold value for this is chosen based on tests such that an SSIM < threshold is classified as a TRUE detection
-6. The de-noising is the bottleneck in the above code. Therefore, ony the first few seconds of the video are considered. The assumption behind this is the following: whatever triggered the motion sensor has to be present in the first few seconds of the video. Therefore there is no need to parse the entire video which can get very time consuming
-7. The other idea is to consider a chunk of the video (in 1s intervals) and compute the average SSI across 1s chunks rather than across each frame in the video
-8. Finally, only a few seconds (initial) of the video clip are considered to speed-up the computation without a reduction in accuracy
+6. The de-noising is the bottleneck in the above code. Therefore, ony few seconds of the video are considered. The frames to be considered are divided between the start, mid and end of the video for higher detection robustness. The assumption behind this is the following: 
+ * Whatever triggered the motion sensor has to be present in the first few seconds of the video. 
+ * If the object in the video is stationary at the start, then this pipeline will fail. That is the motivation for looking at the middle and end of the video as well. 
+ Therefore there is no need to parse the entire video which can get very time consuming
+
+### Usage
+The entire code is just one Python file - `bgSub.py`
+```
+python bgSub.py -h
+usage: bgSub.py [-h] [--f F] [--s S] [--l L] [--t T] [--v V] [--lab LAB]
+                path result
+
+Analyze Arlo video for motion detection
+
+positional arguments:
+  path                  Path to the video(s) you want analyzed
+  result                Name and path of result (.json) file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --f F                 Frame per second of the video (integer). Default is 24
+  --s S                 Number of frames to skip from the start (integer).
+                        Default is 12
+  --l L, --length L     Length of the video(s) in seconds to analyze (real).
+                        Default is 3s
+  --t T, --threshold T  SSI below this number indicates motion (real). Default
+                        is 0.997
+  --v V                 Verbose output? True/False. Default is False
+  --lab LAB             Known label for videos in path. True/False
+```
+For testing the code on known videos (videos known to be TRUE or FALSE detections beforehand), supply the flag `--lab TRUE/FALSE`
+A 4-tuple is written to the JSON output file which is `(name_of_video, motion_detected_true_or_false, average_SSI_score, time_elapsed_in_analysis)`.
+
+### Results
+This code was tested on video captured from my home's Arlo camera on 152 videos of length varying from 3s to 10s (the standard length of video captured on my cameras). These videos were pre-labelled as True (126) or False (26) videos. This code achieves an accuracy of **TO-DO**
+Here are some examples of True/False detections:
+
+![Video classified as True detection](/images/TRUE.gif)
+Correct classification (motion detected)
+
+![Video classified as False detection](/images/FALSE.gif)
+Correct classification (no motion detected)
 
 ### TO-DO
 - [ ] Upload the final code to repo
-- [ ] Convert code to accept command line arguments
-- [ ] Insert more information in README (pictures, explanation of denoising, timing)
+- [x] Convert code to accept command line arguments
+- [x] Insert more information in README (pictures, explanation of denoising, timing)
 - [ ] Add code for getting video from the Arlo website
 - [ ] Host code on a simple server and make the workflow automatic
 - [ ] OR plug this into IFTTT
