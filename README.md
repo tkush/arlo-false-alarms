@@ -44,11 +44,15 @@ optional arguments:
   --v V                 Verbose output? True/False. Default is False
   --lab LAB             Known label for videos in path. True/False
 ```
-For testing the code on known videos (videos known to be TRUE or FALSE detections beforehand), supply the flag `--lab TRUE/FALSE`
+For testing the code on known videos (videos known to be TRUE or FALSE detections beforehand), supply the flag `--lab TRUE/FALSE`.
 A 4-tuple is written to the JSON output file which is `(name_of_video, motion_detected_true_or_false, average_SSI_score, time_elapsed_in_analysis)`.
 
 ### Results
-This code was tested on video captured from my home's Arlo camera on 152 videos of length varying from 3s to 10s (the standard length of video captured on my cameras). These videos were pre-labelled as True (126) or False (26) videos. This code achieves an accuracy of **TO-DO**
+This code was tested on video captured from my home's Arlo camera on 152 videos of length varying from 3s to 10s (the standard length of video captured on my cameras). These videos were pre-labelled as True (138) or False (26) videos. This code achieves an accuracy of **TO-DO** (138/151 correct true detections and /27 correct false detections) with the following parameters: 
+* FPS set to 24
+* First 12 frames skipped
+* 3 seconds of video considered (1s at the start, 1s in the middle and 1s from the end)
+* Threshold SSI of 99.7%
 Here are some examples of True/False detections:
 
 <img src="/images/TRUE.gif" alt="Video correctly classified as True detection" width="320" height="176" />
@@ -59,8 +63,12 @@ Correct classification (motion detected)
 
 Correct classification (no motion detected)
 
+The approach presented here is advantageous in that it can be applied to a different camera feed without any modifications to the code since the basic idea remains the same irrespective of where the camera is pointed or what the lighting conditions are. 
+
+Feel free to post comments/fork this repo or just drop me a line! 
+
 ### TO-DO
-- [ ] Upload the final code to repo
+- [x] Upload the final code to repo
 - [x] Convert code to accept command line arguments
 - [x] Insert more information in README (pictures, explanation of denoising, timing)
 - [ ] Add code for getting video from the Arlo website
